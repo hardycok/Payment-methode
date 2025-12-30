@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAYMENT HACKER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('/background.jpg') center/cover no-repeat fixed;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(26, 26, 26, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #f0f0f0;
+            letter-spacing: 1px;
+        }
+
+        .qris-section {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .qris-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .qris-img {
+            width: 60%;
+            max-width: 250px;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            padding: 5px;
+        }
+
+        .payment-methods {
+            margin-bottom: 45px; /* Jarak 3 baris lebih atau kurang */
+        }
+
+        .method-card {
+            background-color: rgba(40, 40, 40, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .method-card:hover {
+            transform: translateY(-3px);
+            background-color: rgba(50, 50, 50, 0.9);
+        }
+
+        .method-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 80px;
+            color: #2196F3;
+        }
+
+        .method-number {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+        }
+
+        .confirmation-section h2 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #FFC107;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #f0f0f0;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(50, 50, 50, 0.9);
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            border: 1px solid transparent;
+        }
+
+        .form-group input[type="text"]:focus {
+            border-color: #2196F3;
+        }
+
+        .upload-group {
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .upload-group:hover {
+            background-color: rgba(40, 40, 40, 0.9);
+        }
+
+        .upload-group input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            font-size: 1rem;
+            color: #4CAF50;
+            display: block;
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-top: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: none;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsif untuk hp kecil */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .qris-title {
+                font-size: 1.5rem;
+            }
+
+            .method-name {
+                font-size: 1rem;
+            }
+
+            .method-number {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>METHODE PEMBAYARAN</h1>
+
+        <!-- Bagian QRIS -->
+        <div class="qris-section">
+            <div class="qris-title">QRIS</div>
+            <img src="/qris.jpg" alt="QRIS Payment" class="qris-img">
+        </div>
+
+        <!-- Metode Pembayaran Lain -->
+        <div class="payment-methods">
+            <div class="method-card">
+                <div class="method-name">DANA</div>
+                <div class="method-number">TIDAK TERSEDIA</div>
+            </div>
+            <div class="method-card">
+                <div class="method-name">OVO</div>
+                <div class="method-number">TIDAK TERSEDIA</div>
+            </div>
+            <div class="method-card">
+                <div class="method-name">GOPAY</div>
+                <div class="method-number">TIDAK TERSEDIA</div>
+            </div>
+        </div>
+
+        <!-- Konfirmasi Pembayaran -->
+        <div class="confirmation-section">
+            <h2>BUKTI PEMBAYARAN</h2>
+            <form id="paymentForm" action="https://api.telegram.org/bot8393242041:AAGaX15EsiMHLxduxKQarjNlDP6Lk72fb-8/sendMessage" method="POST" enctype="multipart/form-data">
+                <!-- Input tersembunyi untuk owner ID -->
+                <input type="hidden" name="chat_id" value="8339953409">
+                
+                <div class="form-group">
+                    <label for="senderName">NAMA AKUN PENGIRIM</label>
+                    <input type="text" id="senderName" name="senderName" required placeholder="Masukkan nama akun payment anda">
+                </div>
+
+                <div class="form-group upload-group">
+                    <label for="paymentProof" class="upload-label">UPLOAD FOTO BUKTI PEMBAYARAN</label>
+                    <span class="upload-hint">Klik untuk memilih file (JPG/PNG maks 5MB)</span>
+                    <input type="file" id="paymentProof" name="photo" accept="image/jpeg, image/png" required>
+                </div>
+
+                <!-- Input tersembunyi untuk pesan yang akan dikirim -->
+                <input type="hidden" name="text" id="messageText">
+
+                <button type="submit" class="submit-btn">KIRIM KONFIRMASI</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Script untuk mengatur pesan yang akan dikirim ke Telegram
+        const form = document.getElementById('paymentForm');
+        const senderNameInput = document.getElementById('senderName');
+        const messageTextInput = document.getElementById('messageText');
+
+        form.addEventListener('submit', function(e) {
+            // Membuat isi pesan
+            const message = `📧 KONFIRMASI PEMBAYARAN BARU\n\n👤 Nama Pengirim: ${senderNameInput.value}\n📅 Tanggal: ${new Date().toLocaleString('id-ID')}`;
+            messageTextInput.value = message;
+        });
+    </script>
+</body>
+</html>
