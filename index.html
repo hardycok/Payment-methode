@@ -57,10 +57,16 @@
             border-radius: 10px;
             border: 2px solid #4CAF50;
             padding: 5px;
+            cursor: zoom-in;
+            transition: all 0.2s ease;
+        }
+
+        .qris-img:hover {
+            transform: scale(1.02);
         }
 
         .payment-methods {
-            margin-bottom: 45px; /* Jarak 3 baris lebih atau kurang */
+            margin-bottom: 45px;
         }
 
         .method-card {
@@ -170,6 +176,55 @@
             background-color: #45a049;
         }
 
+        /* Style Modal Zoom QRIS */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0.1)} 
+            to {transform: scale(1)}
+        }
+
+        .modal-content {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         /* Responsif untuk hp kecil */
         @media (max-width: 360px) {
             h1 {
@@ -187,17 +242,22 @@
             .method-number {
                 font-size: 1rem;
             }
+
+            .close {
+                font-size: 30px;
+                right: 25px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>METHODE PEMBAYARAN</h1>
+        <h1>PAYMENT METHODE</h1>
 
         <!-- Bagian QRIS -->
         <div class="qris-section">
             <div class="qris-title">QRIS</div>
-            <img src="/qris.jpg" alt="QRIS Payment" class="qris-img">
+            <img src="/qris.jpg" alt="QRIS Payment" class="qris-img" id="qrisImage">
         </div>
 
         <!-- Metode Pembayaran Lain -->
@@ -219,39 +279,109 @@
         <!-- Konfirmasi Pembayaran -->
         <div class="confirmation-section">
             <h2>BUKTI PEMBAYARAN</h2>
-            <form id="paymentForm" action="https://api.telegram.org/bot8393242041:AAGaX15EsiMHLxduxKQarjNlDP6Lk72fb-8/sendMessage" method="POST" enctype="multipart/form-data">
-                <!-- Input tersembunyi untuk owner ID -->
-                <input type="hidden" name="chat_id" value="8339953409">
-                
+            <form id="paymentForm" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="senderName">NAMA AKUN PENGIRIM</label>
-                    <input type="text" id="senderName" name="senderName" required placeholder="Masukkan nama akun payment anda">
+                    <label for="senderName">NAMA PENGIRIM</label>
+                    <input type="text" id="senderName" name="senderName" required placeholder="nama pengirim/nama akun payment">
                 </div>
 
                 <div class="form-group upload-group">
                     <label for="paymentProof" class="upload-label">UPLOAD FOTO BUKTI PEMBAYARAN</label>
-                    <span class="upload-hint">Klik untuk memilih file (JPG/PNG maks 5MB)</span>
+                    <span class="upload-hint">Klik untuk memilih file (JPG/PNG maks 10MB)</span>
                     <input type="file" id="paymentProof" name="photo" accept="image/jpeg, image/png" required>
                 </div>
-
-                <!-- Input tersembunyi untuk pesan yang akan dikirim -->
-                <input type="hidden" name="text" id="messageText">
 
                 <button type="submit" class="submit-btn">KIRIM KONFIRMASI</button>
             </form>
         </div>
     </div>
 
-    <script>
-        // Script untuk mengatur pesan yang akan dikirim ke Telegram
-        const form = document.getElementById('paymentForm');
-        const senderNameInput = document.getElementById('senderName');
-        const messageTextInput = document.getElementById('messageText');
+    <!-- Modal Zoom QRIS -->
+    <div id="qrisModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
 
-        form.addEventListener('submit', function(e) {
-            // Membuat isi pesan
-            const message = `📧 KONFIRMASI PEMBAYARAN BARU\n\n👤 Nama Pengirim: ${senderNameInput.value}\n📅 Tanggal: ${new Date().toLocaleString('id-ID')}`;
-            messageTextInput.value = message;
+    <script>
+        // --- KONFIGURASI TELEGRAM ---
+        const BOT_TOKEN = "8393242041:AAGaX15EsiMHLxduxKQarjNlDP6Lk72fb-8";
+        const OWNER_ID = "8339953409";
+
+        // --- FITUR ZOOM QRIS ---
+        const qrisModal = document.getElementById('qrisModal');
+        const modalImage = document.getElementById('modalImage');
+        const qrisImage = document.getElementById('qrisImage');
+        const closeBtn = document.querySelector('.close');
+
+        qrisImage.onclick = function() {
+            qrisModal.style.display = "block";
+            modalImage.src = this.src;
+        }
+
+        closeBtn.onclick = function() {
+            qrisModal.style.display = "none";
+        }
+
+        qrisModal.onclick = function(e) {
+            if (e.target === qrisModal) {
+                qrisModal.style.display = "none";
+            }
+        }
+
+        // --- FITUR KIRIM DATA KE TELEGRAM ---
+        const paymentForm = document.getElementById('paymentForm');
+        const senderNameInput = document.getElementById('senderName');
+        const paymentProofInput = document.getElementById('paymentProof');
+
+        paymentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validasi input
+            if (!senderNameInput.value.trim()) {
+                alert("Nama pengirim tidak boleh kosong!");
+                return;
+            }
+
+            if (!paymentProofInput.files.length) {
+                alert("Silakan upload bukti pembayaran!");
+                return;
+            }
+
+            // Cek ukuran file maksimal 10MB
+            const fileSize = paymentProofInput.files[0].size / 1024 / 1024;
+            if (fileSize > 10) {
+                alert("Ukuran file terlalu besar! Maksimal 10MB.");
+                return;
+            }
+
+            // Siapkan data untuk dikirim
+            const formData = new FormData();
+            formData.append('chat_id', OWNER_ID);
+            formData.append('photo', paymentProofInput.files[0]);
+            formData.append('caption', 
+                `📧 KONFIRMASI PEMBAYARAN BARU\n` +
+                `\n👤 Nama Pengirim: ${senderNameInput.value.trim()}\n` +
+                `📅 Tanggal & Waktu: ${new Date().toLocaleString('id-ID', {timeZone: 'Asia/Jakarta'})}\n` +
+                `💳 Metode: QRIS/DANA/OVO/GOPAY`
+            );
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.ok) {
+                    alert("✅ Konfirmasi pembayaran berhasil dikirim!");
+                    paymentForm.reset();
+                } else {
+                    alert(`❌ Gagal mengirim: ${result.description}`);
+                }
+            } catch (error) {
+                alert(`❌ Terjadi kesalahan: ${error.message}`);
+            }
         });
     </script>
 </body>
